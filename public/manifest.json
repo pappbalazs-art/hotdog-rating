@@ -1,0 +1,16 @@
+{
+	"name": "Hot-Dog Randi Rating",
+	"short_name": "Hot-Dog Randi",
+	"description": "We are rating hot dogs the cutest way possible!",
+	"start_url": "/",
+	"display": "standalone",
+	"background_color": "#ffffff",
+	"theme_color": "#ffffff",
+	"icons": [
+		{
+			"src": "/favicon.ico",
+			"sizes": "any",
+			"type": "image/x-icon"
+		}
+	]
+}
