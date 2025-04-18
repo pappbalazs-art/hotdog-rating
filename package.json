@@ -27,6 +27,7 @@
     "@heroui/switch": "2.2.15",
     "@heroui/system": "2.4.13",
     "@heroui/theme": "2.4.13",
+    "@internationalized/date": "^3.8.0",
     "@react-aria/visually-hidden": "3.8.21",
     "clsx": "2.1.1",
     "firebase": "^11.6.0",

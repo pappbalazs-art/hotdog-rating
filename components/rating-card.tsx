@@ -35,7 +35,7 @@ function RatingCardNote({ value }: { value: string }) {
 
 export function RatingCard({ rating }: { rating: any }) {
 	return (
-		<Card className="px-2 pt-3 max-w-md">
+		<Card className="px-2 pt-3 mb-10 last:mb-0 max-w-md">
 			<CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
 				<p className="uppercase font-bold">{rating.location_name}</p>
 				<p className="text-tiny">{rating.location_address}</p>
@@ -45,36 +45,36 @@ export function RatingCard({ rating }: { rating: any }) {
 			</CardHeader>
 			<CardBody className="overflow-visible py-5">
 				<RatingCardSlider label="Dog" value={rating.dog_rating} />
-				<RatingCardNote value={rating.dog_note} />
+				<RatingCardNote value={rating.dog_notes} />
 				<RatingCardSlider label="Bun" value={rating.bun_rating} />
-				<RatingCardNote value={rating.bun_note} />
+				<RatingCardNote value={rating.bun_notes} />
 				<RatingCardSlider label="Sauce" value={rating.sauce_rating} />
-				<RatingCardNote value={rating.sauce_note} />
+				<RatingCardNote value={rating.sauce_notes} />
 				<RatingCardSlider
 					label="Sauce to Dog Ratio"
 					value={rating.sauce_to_dog_ratio_rating}
 				/>
-				<RatingCardNote value={rating.sauce_to_dog_ratio_note} />
+				<RatingCardNote value={rating.sauce_to_dog_ratio_notes} />
 				<RatingCardSlider
 					label="Dog to Bun Ratio"
 					value={rating.dog_to_bun_ratio_rating}
 				/>
-				<RatingCardNote value={rating.dog_to_bun_ratio_note} />
+				<RatingCardNote value={rating.dog_to_bun_ratio_notes} />
 				<RatingCardSlider
 					label="Overall Taste"
-					value={rating.taste_rating}
+					value={rating.overall_taste_rating}
 				/>
-				<RatingCardNote value={rating.taste_note} />
+				<RatingCardNote value={rating.overall_taste_notes} />
 				<RatingCardSlider
 					label="Customer Service"
 					value={rating.customer_service_rating}
 				/>
-				<RatingCardNote value={rating.customer_service_note} />
+				<RatingCardNote value={rating.customer_service_notes} />
 				<RatingCardSlider
 					label="Overall Experience"
-					value={rating.overall_rating}
+					value={rating.overall_experience_rating}
 				/>
-				<RatingCardNote value={rating.overall_note} />
+				<RatingCardNote value={rating.overall_experience_notes} />
 				<p className="font-medium text-medium text-medium-700">
 					Extras
 				</p>
