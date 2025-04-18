@@ -140,7 +140,7 @@ export default function CreateRatingModal({
 			}}
 			isOpen={isOpen}
 			placement="center"
-			scrollBehavior="inside"
+			scrollBehavior="outside"
 			onOpenChange={onOpenChange}
 		>
 			<ModalContent>

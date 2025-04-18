@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { getDocs, collection } from "firebase/firestore";
+import { getDocs, collection, query, orderBy } from "firebase/firestore";
 import { database } from "@/firebase";
 
 import DefaultLayout from "@/layouts/default";
@@ -17,7 +17,9 @@ export default function IndexPage() {
 	const createRatingModalDisclosure = useDisclosure();
 
 	const updateRatings = async () => {
-		const ratingsSnapshot = await getDocs(collection(database, "ratings"));
+		const ratingsRef = collection(database, "ratings");
+		const ratingsQuery = query(ratingsRef, orderBy("date", "desc"));
+		const ratingsSnapshot = await getDocs(ratingsQuery);
 
 		setRatings(
 			ratingsSnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
