@@ -1,13 +1,11 @@
+import { IconSvgProps } from "@/types";
+
 export const PlusIcon = ({
 	size = 24,
 	width,
 	height,
 	...props
-}: {
-	size?: number;
-	width?: number;
-	height?: number;
-}) => {
+}: IconSvgProps) => {
 	return (
 		<svg
 			aria-hidden="true"

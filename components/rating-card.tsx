@@ -35,7 +35,7 @@ function RatingCardNote({ value }: { value: string }) {
 
 export function RatingCard({ rating }: { rating: any }) {
 	return (
-		<Card className="px-2 pt-3 mb-10 last:mb-0 max-w-md">
+		<Card className="px-2 pt-3 mb-10 last:mb-0">
 			<CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
 				<p className="uppercase font-bold">{rating.location_name}</p>
 				<p className="text-tiny">{rating.location_address}</p>
