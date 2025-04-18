@@ -7,6 +7,7 @@ import DefaultLayout from "@/layouts/default";
 import { RatingCard } from "@/components/rating-card";
 
 import { Button } from "@heroui/button";
+import { Spinner } from "@heroui/spinner";
 import { useDisclosure } from "@heroui/modal";
 import { PlusIcon } from "@/components/icons/plus-icon";
 import { SearchIcon } from "@/components/icons/search-icon";
@@ -16,6 +17,7 @@ import { Input } from "@heroui/input";
 
 export default function IndexPage() {
 	const [ratings, setRatings] = useState<any>([]);
+	const [loading, setLoading] = useState<boolean>(true);
 
 	const [searchFilter, setSearchFilter] = useState("");
 
@@ -47,6 +49,7 @@ export default function IndexPage() {
 		setRatings(
 			ratingsSnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
 		);
+		setLoading(false);
 	};
 
 	useEffect(() => {
@@ -86,18 +89,28 @@ export default function IndexPage() {
 				isClearable
 			/>
 
-			{filteredRatings && (
-				<div className="ratings-container z-0">
-					{filteredRatings.map((rating: any) => (
-						<RatingCard rating={rating} key={rating.id} />
-					))}
-				</div>
+			{loading && (
+				<Spinner
+					className="absolute inset-0 m-auto"
+					color="warning"
+					size="lg"
+				/>
 			)}
 
-			{filteredRatings.length === 0 && (
-				<span className="text-small text-default-500 text-center">
-					Itt még sajnos nem voltunk :(
-				</span>
+			{!loading && (
+				<>
+					<div className="ratings-container z-0 animate-fade-in">
+						{filteredRatings.map((rating: any) => (
+							<RatingCard rating={rating} key={rating.id} />
+						))}
+					</div>
+
+					{filteredRatings.length === 0 && (
+						<span className="text-small text-default-500 text-center">
+							Itt még sajnos nem voltunk :(
+						</span>
+					)}
+				</>
 			)}
 		</DefaultLayout>
 	);
