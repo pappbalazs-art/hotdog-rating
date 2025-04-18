@@ -94,6 +94,12 @@ export default function IndexPage() {
 					))}
 				</div>
 			)}
+
+			{filteredRatings.length === 0 && (
+				<span className="text-small text-default-500 text-center">
+					Itt még sajnos nem voltunk :(
+				</span>
+			)}
 		</DefaultLayout>
 	);
 }
