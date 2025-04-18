@@ -75,9 +75,11 @@ export function RatingCard({ rating }: { rating: any }) {
 					value={rating.overall_experience_rating}
 				/>
 				<RatingCardNote value={rating.overall_experience_notes} />
-				<p className="font-medium text-medium text-medium-700">
-					Extras
-				</p>
+				{rating.extras && (
+					<p className="font-medium text-medium text-medium-700">
+						Extras
+					</p>
+				)}
 				<RatingCardNote value={rating.extras} />
 			</CardBody>
 		</Card>
