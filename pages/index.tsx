@@ -18,7 +18,6 @@ export default function IndexPage() {
 	const [ratings, setRatings] = useState<any>([]);
 
 	const [searchFilter, setSearchFilter] = useState("");
-	const hasSearchFilter = Boolean(searchFilter);
 
 	const createRatingModalDisclosure = useDisclosure();
 
