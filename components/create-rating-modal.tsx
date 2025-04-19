@@ -15,6 +15,7 @@ import { Slider } from "@heroui/slider";
 import { getLocalTimeZone, today } from "@internationalized/date";
 import { addDoc, collection, Timestamp } from "firebase/firestore";
 import { database } from "@/firebase";
+import { HeartIcon } from "./icons/heart-icon";
 
 function CreateRatingSlider({
 	label,
@@ -41,6 +42,17 @@ function CreateRatingSlider({
 			showSteps
 			size="md"
 			step={1}
+			renderThumb={(props) => (
+				<div {...props} className="group">
+					<HeartIcon
+						className="relative top-[6px] cursor-grab"
+						size={30}
+						fill="#ffffff"
+						stroke="#f5a524"
+						strokeWidth={2}
+					/>
+				</div>
+			)}
 		/>
 	);
 }

@@ -11,6 +11,7 @@ import {
 import { Button } from "@heroui/button";
 import { VerticalDotsIcon } from "./icons/vertical-dots-icon";
 import { Link } from "@heroui/link";
+import { HeartIcon } from "./icons/heart-icon";
 
 function RatingCardSlider({ label, value }: { label: string; value: number }) {
 	return (
@@ -27,6 +28,17 @@ function RatingCardSlider({ label, value }: { label: string; value: number }) {
 			minValue={1}
 			size="md"
 			step={1}
+			renderThumb={(props) => (
+				<div {...props} className="group">
+					<HeartIcon
+						className="relative top-[6px]"
+						size={30}
+						fill="#ffffff"
+						stroke="#f5a524"
+						strokeWidth={2}
+					/>
+				</div>
+			)}
 		/>
 	);
 }
