@@ -128,6 +128,16 @@ export default function EditRatingModal({
 			overall_experience_rating: overallExperienceRating,
 			overall_experience_notes: overallExperienceNotes,
 			extras: extras,
+			score:
+				(dogRating +
+					bunRating +
+					sauceRating +
+					sauceToDogRatioRating +
+					dogToBunRatioRating +
+					overallTasteRating +
+					customerServiceRating +
+					overallExperienceRating) /
+				8,
 		});
 		await updateRatings();
 

@@ -13,7 +13,15 @@ import { VerticalDotsIcon } from "./icons/vertical-dots-icon";
 import { Link } from "@heroui/link";
 import { HeartIcon } from "./icons/heart-icon";
 
-function RatingCardSlider({ label, value }: { label: string; value: number }) {
+function RatingCardSlider({
+	label,
+	value,
+	step,
+}: {
+	label: string;
+	value: number;
+	step?: number;
+}) {
 	return (
 		<Slider
 			label={label}
@@ -27,7 +35,7 @@ function RatingCardSlider({ label, value }: { label: string; value: number }) {
 			maxValue={10}
 			minValue={1}
 			size="md"
-			step={1}
+			step={step || 1}
 			renderThumb={(props) => (
 				<div {...props} className="group">
 					<HeartIcon
@@ -46,7 +54,7 @@ function RatingCardSlider({ label, value }: { label: string; value: number }) {
 function RatingCardNote({ value }: { value: string }) {
 	return (
 		value && (
-			<p className="pb-6 last:pb-0 font-medium text-small text-default-500">
+			<p className="pb-6 font-medium text-small text-default-500">
 				{value}
 			</p>
 		)
@@ -151,6 +159,11 @@ export function RatingCard({
 					</p>
 				)}
 				<RatingCardNote value={rating.extras} />
+				<RatingCardSlider
+					label="Score"
+					value={rating.score}
+					step={0.25}
+				/>
 			</CardBody>
 		</Card>
 	);
