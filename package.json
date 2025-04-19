@@ -13,6 +13,7 @@
     "@heroui/card": "^2.2.16",
     "@heroui/code": "2.2.12",
     "@heroui/date-picker": "^2.3.17",
+    "@heroui/dropdown": "^2.3.17",
     "@heroui/form": "^2.1.16",
     "@heroui/input": "^2.4.17",
     "@heroui/kbd": "2.2.13",

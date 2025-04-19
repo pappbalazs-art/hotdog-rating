@@ -2,6 +2,15 @@ import getDateStringFromTimestamp from "@/utils/date-string-from-timestamp";
 
 import { Card, CardBody, CardHeader } from "@heroui/card";
 import { Slider } from "@heroui/slider";
+import {
+	Dropdown,
+	DropdownItem,
+	DropdownMenu,
+	DropdownTrigger,
+} from "@heroui/dropdown";
+import { Button } from "@heroui/button";
+import { VerticalDotsIcon } from "./icons/vertical-dots-icon";
+import { Link } from "@heroui/link";
 
 function RatingCardSlider({ label, value }: { label: string; value: number }) {
 	return (
@@ -16,7 +25,6 @@ function RatingCardSlider({ label, value }: { label: string; value: number }) {
 			color="warning"
 			maxValue={10}
 			minValue={1}
-			showSteps
 			size="md"
 			step={1}
 		/>
@@ -33,15 +41,65 @@ function RatingCardNote({ value }: { value: string }) {
 	);
 }
 
-export function RatingCard({ rating }: { rating: any }) {
+export function RatingCard({
+	rating,
+	setSelectedRating,
+	openEditRatingModal,
+	openDeleteRatingModal,
+}: {
+	rating: any;
+	setSelectedRating: Function;
+	openEditRatingModal: () => void;
+	openDeleteRatingModal: () => void;
+}) {
 	return (
 		<Card className="px-2 pt-3 mb-10 last:mb-0">
-			<CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-				<p className="uppercase font-bold">{rating.location_name}</p>
-				<p className="text-tiny">{rating.location_address}</p>
-				<small className="text-default-500">
-					{getDateStringFromTimestamp(rating.date)}
-				</small>
+			<CardHeader className="pb-0 pt-2 px-4 flex-row items-start justify-between">
+				<div className="flex-col items-start">
+					<p className="uppercase font-bold">
+						{rating.location_name}
+					</p>
+					<p className="text-tiny">{rating.location_address}</p>
+					<small className="text-default-500">
+						{getDateStringFromTimestamp(rating.date)}
+					</small>
+				</div>
+
+				<Dropdown placement="bottom-end">
+					<DropdownTrigger>
+						<Button
+							className="-mr-2"
+							isIconOnly
+							size="sm"
+							variant="light"
+						>
+							<VerticalDotsIcon />
+						</Button>
+					</DropdownTrigger>
+					<DropdownMenu variant="flat">
+						<DropdownItem
+							key="edit"
+							onPress={() => {
+								setSelectedRating(rating);
+								openEditRatingModal();
+							}}
+						>
+							Edit
+						</DropdownItem>
+						<DropdownItem
+							key="delete"
+							color="danger"
+							onPress={() => {
+								setSelectedRating(rating);
+								openDeleteRatingModal();
+							}}
+						>
+							<Link color="danger" size="sm">
+								Delete
+							</Link>
+						</DropdownItem>
+					</DropdownMenu>
+				</Dropdown>
 			</CardHeader>
 			<CardBody className="overflow-visible py-5">
 				<RatingCardSlider label="Dog" value={rating.dog_rating} />

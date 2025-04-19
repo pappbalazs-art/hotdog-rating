@@ -4,24 +4,30 @@ import { getDocs, collection, query, orderBy } from "firebase/firestore";
 import { database } from "@/firebase";
 
 import DefaultLayout from "@/layouts/default";
-import { RatingCard } from "@/components/rating-card";
 
 import { Button } from "@heroui/button";
 import { Spinner } from "@heroui/spinner";
 import { useDisclosure } from "@heroui/modal";
+import { Input } from "@heroui/input";
 import { PlusIcon } from "@/components/icons/plus-icon";
 import { SearchIcon } from "@/components/icons/search-icon";
 
+import { RatingCard } from "@/components/rating-card";
+
 import CreateRatingModal from "@/components/create-rating-modal";
-import { Input } from "@heroui/input";
+import DeleteRatingModal from "@/components/delete-rating-modal";
+import EditRatingModal from "@/components/edit-rating-modal";
 
 export default function IndexPage() {
 	const [ratings, setRatings] = useState<any>([]);
+	const [selectedRating, setSelectedRating] = useState<any>(null);
 	const [loading, setLoading] = useState<boolean>(true);
 
 	const [searchFilter, setSearchFilter] = useState("");
 
 	const createRatingModalDisclosure = useDisclosure();
+	const editRatingModalDisclosure = useDisclosure();
+	const deleteRatingModalDisclosure = useDisclosure();
 
 	const filteredRatings = useMemo(() => {
 		let filteredRatings = [...ratings];
@@ -64,6 +70,20 @@ export default function IndexPage() {
 				onOpenChange={createRatingModalDisclosure.onOpenChange}
 				updateRatings={updateRatings}
 			/>
+			<EditRatingModal
+				isOpen={editRatingModalDisclosure.isOpen}
+				onOpen={editRatingModalDisclosure.onOpen}
+				onOpenChange={editRatingModalDisclosure.onOpenChange}
+				selectedRating={selectedRating}
+				updateRatings={updateRatings}
+			/>
+			<DeleteRatingModal
+				isOpen={deleteRatingModalDisclosure.isOpen}
+				onOpen={deleteRatingModalDisclosure.onOpen}
+				onOpenChange={deleteRatingModalDisclosure.onOpenChange}
+				selectedRating={selectedRating}
+				updateRatings={updateRatings}
+			/>
 
 			<Button
 				className="fixed bottom-4 right-4 z-40"
@@ -101,7 +121,17 @@ export default function IndexPage() {
 				<>
 					<div className="ratings-container z-0 animate-fade-in">
 						{filteredRatings.map((rating: any) => (
-							<RatingCard rating={rating} key={rating.id} />
+							<RatingCard
+								key={rating.id}
+								rating={rating}
+								setSelectedRating={setSelectedRating}
+								openEditRatingModal={
+									editRatingModalDisclosure.onOpen
+								}
+								openDeleteRatingModal={
+									deleteRatingModalDisclosure.onOpen
+								}
+							/>
 						))}
 					</div>
 

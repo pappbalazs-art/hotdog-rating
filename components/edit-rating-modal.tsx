@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
 	Modal,
@@ -12,8 +12,19 @@ import { Input } from "@heroui/input";
 import { DatePicker } from "@heroui/date-picker";
 import { Slider } from "@heroui/slider";
 
-import { getLocalTimeZone, today } from "@internationalized/date";
-import { addDoc, collection, Timestamp } from "firebase/firestore";
+import {
+	fromDate,
+	getLocalTimeZone,
+	toCalendarDate,
+	today,
+} from "@internationalized/date";
+import {
+	addDoc,
+	collection,
+	doc,
+	Timestamp,
+	updateDoc,
+} from "firebase/firestore";
 import { database } from "@/firebase";
 
 function CreateRatingSlider({
@@ -45,15 +56,17 @@ function CreateRatingSlider({
 	);
 }
 
-export default function CreateRatingModal({
+export default function EditRatingModal({
 	isOpen,
 	onOpen,
 	onOpenChange,
+	selectedRating,
 	updateRatings,
 }: {
 	isOpen: boolean;
 	onOpen: () => void;
 	onOpenChange: () => void;
+	selectedRating: any;
 	updateRatings: Function;
 }) {
 	const [locationName, setLocationName] = useState("");
@@ -77,12 +90,12 @@ export default function CreateRatingModal({
 	const [overallExperienceNotes, setOverallExperienceNotes] = useState("");
 	const [extras, setExtras] = useState("");
 
-	const handleCreateRating = async () => {
+	const handleSaveRating = async () => {
 		const dateTimestamp = Timestamp.fromDate(
 			new Date(date.year, date.month - 1, date.day)
 		);
 
-		await addDoc(collection(database, "ratings"), {
+		await updateDoc(doc(database, "ratings", selectedRating.id), {
 			location_name: locationName,
 			location_address: locationAddress,
 			date: dateTimestamp,
@@ -107,29 +120,39 @@ export default function CreateRatingModal({
 		await updateRatings();
 
 		onOpenChange();
-
-		// Reset the form fields
-		setLocationName("");
-		setLocationAddress("");
-		setDate(today(getLocalTimeZone()));
-		setDogRating(5);
-		setDogNotes("");
-		setBunRating(5);
-		setBunNotes("");
-		setSauceRating(5);
-		setSauceNotes("");
-		setSauceToDogRatioRating(5);
-		setSauceToDogRatioNotes("");
-		setDogToBunRatioRating(5);
-		setDogToBunRatioNotes("");
-		setOverallTasteRating(5);
-		setOverallTasteNotes("");
-		setCustomerServiceRating(5);
-		setCustomerServiceNotes("");
-		setOverallExperienceRating(5);
-		setOverallExperienceNotes("");
-		setExtras("");
 	};
+
+	useEffect(() => {
+		if (!selectedRating) return;
+
+		setLocationName(selectedRating.location_name);
+		setLocationAddress(selectedRating.location_address);
+		setDate(
+			toCalendarDate(
+				fromDate(
+					new Date(selectedRating.date?.seconds * 1000),
+					getLocalTimeZone()
+				)
+			)
+		);
+		setDogRating(selectedRating.dog_rating);
+		setDogNotes(selectedRating.dog_notes);
+		setBunRating(selectedRating.bun_rating);
+		setBunNotes(selectedRating.bun_notes);
+		setSauceRating(selectedRating.sauce_rating);
+		setSauceNotes(selectedRating.sauce_notes);
+		setSauceToDogRatioRating(selectedRating.sauce_to_dog_ratio_rating);
+		setSauceToDogRatioNotes(selectedRating.sauce_to_dog_ratio_notes);
+		setDogToBunRatioRating(selectedRating.sauce_to_dog_ratio_rating);
+		setDogToBunRatioNotes(selectedRating.dog_to_bun_ratio_notes);
+		setOverallTasteRating(selectedRating.overall_experience_rating);
+		setOverallTasteNotes(selectedRating.overall_taste_notes);
+		setCustomerServiceRating(selectedRating.customer_service_rating);
+		setCustomerServiceNotes(selectedRating.customer_service_notes);
+		setOverallExperienceRating(selectedRating.overall_experience_rating);
+		setOverallExperienceNotes(selectedRating.overall_experience_notes);
+		setExtras(selectedRating.extras);
+	}, [selectedRating, isOpen]);
 
 	return (
 		<Modal
@@ -147,7 +170,7 @@ export default function CreateRatingModal({
 				{(onClose: any) => (
 					<>
 						<ModalHeader className="flex flex-col gap-2">
-							Create new rating
+							Edit rating
 						</ModalHeader>
 						<ModalBody>
 							<Input
@@ -270,12 +293,9 @@ export default function CreateRatingModal({
 							<Button
 								className="w-full"
 								color="warning"
-								isDisabled={
-									!(locationName && locationAddress && date)
-								}
-								onPress={handleCreateRating}
+								onPress={handleSaveRating}
 							>
-								Add rating
+								Save rating
 							</Button>
 						</ModalFooter>
 					</>
