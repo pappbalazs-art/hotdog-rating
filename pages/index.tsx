@@ -1,6 +1,13 @@
-import { useEffect, useMemo, useState } from "react";
+import { SetStateAction, useEffect, useMemo, useState } from "react";
 
-import { getDocs, collection, query, orderBy } from "firebase/firestore";
+import {
+	getDocs,
+	collection,
+	query,
+	orderBy,
+	OrderByDirection,
+	FieldPath,
+} from "firebase/firestore";
 import { database } from "@/firebase";
 
 import DefaultLayout from "@/layouts/default";
@@ -17,6 +24,14 @@ import { RatingCard } from "@/components/rating-card";
 import CreateRatingModal from "@/components/create-rating-modal";
 import DeleteRatingModal from "@/components/delete-rating-modal";
 import EditRatingModal from "@/components/edit-rating-modal";
+import {
+	Dropdown,
+	DropdownItem,
+	DropdownMenu,
+	DropdownTrigger,
+} from "@heroui/dropdown";
+import { FilterIcon } from "@/components/icons/filter-icon";
+import { SharedSelection } from "@heroui/system";
 
 export default function IndexPage() {
 	const [ratings, setRatings] = useState<any>([]);
@@ -24,6 +39,9 @@ export default function IndexPage() {
 	const [loading, setLoading] = useState<boolean>(true);
 
 	const [searchFilter, setSearchFilter] = useState("");
+	const [ratingsOrder, setRatingsOrder] = useState<SharedSelection>(
+		new Set(["date-desc"])
+	);
 
 	const createRatingModalDisclosure = useDisclosure();
 	const editRatingModalDisclosure = useDisclosure();
@@ -47,9 +65,27 @@ export default function IndexPage() {
 		return filteredRatings;
 	}, [ratings, searchFilter]);
 
+	const handleRatingsOrderSelection = (
+		value: SetStateAction<SharedSelection>
+	) => {
+		setRatingsOrder(value);
+		setLoading(true);
+		updateRatings();
+	};
+
 	const updateRatings = async () => {
+		const ratingsOrderBits = ratingsOrder.currentKey?.split("-") || [
+			"date" as any,
+			"desc" as any,
+		];
+
+		console.log(ratingsOrderBits);
+
 		const ratingsRef = collection(database, "ratings");
-		const ratingsQuery = query(ratingsRef, orderBy("date", "desc"));
+		const ratingsQuery = query(
+			ratingsRef,
+			orderBy(ratingsOrderBits[0], ratingsOrderBits[1])
+		);
 		const ratingsSnapshot = await getDocs(ratingsQuery);
 
 		setRatings(
@@ -98,16 +134,45 @@ export default function IndexPage() {
 				<PlusIcon />
 			</Button>
 
-			<Input
-				className="w-full pb-6"
-				variant="bordered"
-				placeholder="Search..."
-				startContent={<SearchIcon />}
-				value={searchFilter}
-				onValueChange={setSearchFilter}
-				onClear={() => setSearchFilter("")}
-				isClearable
-			/>
+			<section className="pb-6 flex flex-row gap-3 items-center justify-between">
+				<Input
+					variant="bordered"
+					placeholder="Search..."
+					startContent={<SearchIcon />}
+					value={searchFilter}
+					onValueChange={setSearchFilter}
+					onClear={() => setSearchFilter("")}
+					isClearable
+				/>
+
+				<Dropdown placement="bottom-end">
+					<DropdownTrigger>
+						<Button isIconOnly size="sm" variant="light">
+							<FilterIcon size={24} />
+						</Button>
+					</DropdownTrigger>
+					<DropdownMenu
+						disallowEmptySelection
+						selectionMode="single"
+						selectedKeys={ratingsOrder}
+						onSelectionChange={handleRatingsOrderSelection}
+						variant="flat"
+					>
+						<DropdownItem key="date-desc">
+							Date: Latest First
+						</DropdownItem>
+						<DropdownItem key="date-asc">
+							Date: Oldest First
+						</DropdownItem>
+						<DropdownItem key="score-desc">
+							Score: High to Low
+						</DropdownItem>
+						<DropdownItem key="score-asc">
+							Score: Low to High
+						</DropdownItem>
+					</DropdownMenu>
+				</Dropdown>
+			</section>
 
 			{loading && (
 				<Spinner
